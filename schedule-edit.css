@@ -7,7 +7,7 @@
 }
 
 .scheduleGrid :global(.ui.button.toggle.active) {
-  background-color: #2185d0 !important;
+
 }
 
 .scheduleGrid :global(.ui.button.toggle.active:hover) {
