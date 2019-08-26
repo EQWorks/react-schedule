@@ -3,15 +3,11 @@ import PropTypes from 'prop-types'
 
 import { Button } from 'semantic-ui-react'
 
-import { DAYS } from '../../../../utils/schedule'
 import styles from './schedule-edit.css'
 
+// const TIMES = [...Array(24).keys()]
+export const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-const propTypes = {
-  schedule: PropTypes.array.isRequired,
-  updateSchedule: PropTypes.func.isRequired,
-}
-const timeLabels = ['12am', '3am', '6am', '9am', '12pm', '3pm', '6pm', '9pm']
 
 class ScheduleEdit extends Component {
   state = {
@@ -29,7 +25,7 @@ class ScheduleEdit extends Component {
     const { day, hour } = data.data
     const newSchedule = this.props.schedule
     newSchedule[day][hour] = !newSchedule[day][hour]
-    this.props.updateSchedule(newSchedule)
+    this.props.update(newSchedule)
   }
 
   onDayCellClick = (_, data) => {
@@ -41,7 +37,7 @@ class ScheduleEdit extends Component {
     } else {
       newSchedule[day] = Array(24).fill(false)
     }
-    this.props.updateSchedule(newSchedule)
+    this.props.update(newSchedule)
   }
 
   onHourCellMouseDown = (day, hour) => (() => {
@@ -87,7 +83,7 @@ class ScheduleEdit extends Component {
         startingHour: null,
         startingState: null,
       })
-      this.props.updateSchedule(displaySchedule)
+      this.props.update(displaySchedule)
     }
   })
 
@@ -101,7 +97,7 @@ class ScheduleEdit extends Component {
           <div className={styles.dayRow} key={day}>
             <Button
               className={styles.dayButton}
-              size='tiny'
+              size='mini'
               basic
               toggle
               active={false}
@@ -111,11 +107,13 @@ class ScheduleEdit extends Component {
             />
             {displaySchedule[i].map((hour, j) => (
               <span style={{ display: 'inline-block' }} key={j}>
-                {i === 0 && (j % 3) === 0 &&
-                  <div style={{ width: '2.5rem' }}>
-                    {timeLabels[j / 3]}
-                  </div>
-                }
+                {/* {TIMES.map(t => (
+                  <Button
+                    key={t}
+                    content={t}
+                    disabled
+                  />
+                ))} */}
                 <Button
                   onClick={this.onHourCellClick}
                   onMouseOver={this.onHourCellMouseOver(i, j)}
@@ -136,7 +134,9 @@ class ScheduleEdit extends Component {
     /* eslint-enable react/no-array-index-key */
   }
 }
-
-ScheduleEdit.propTypes = propTypes
+ScheduleEdit.propTypes = {
+  schedule: PropTypes.array.isRequired,
+  update: PropTypes.func.isRequired,
+}
 
 export default ScheduleEdit
