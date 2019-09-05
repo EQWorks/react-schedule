@@ -6,6 +6,8 @@ import { Button } from 'semantic-ui-react'
 import produce from "immer"
 
 
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
 const propTypes = {
   defaultSchedule: PropTypes.array,
   onChange: PropTypes.func.isRequired,
@@ -32,8 +34,6 @@ const useStyles = makeStyles({
   }
 })
 
-const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-
 const Schedule = ({ defaultSchedule, onChange }) => {
   const [schedule, setSchedule] = useState(defaultSchedule)
   const [dragStart, setDragStart] = useState() // { day, hour }
@@ -51,11 +51,9 @@ const Schedule = ({ defaultSchedule, onChange }) => {
   const onDayClick = (_, data) => {
     const { day } = data.data
     setSchedule(produce(draftSchedule => {
-      if (draftSchedule[day].filter(hour => hour).length < 24) {
-        draftSchedule[day] = Array(24).fill(true)
-      } else {
-        draftSchedule[day] = Array(24).fill(false)
-      }
+      draftSchedule[day] = Array(24).fill(
+        draftSchedule[day].filter(hour => hour).length < 24
+      )
     }))
   }
 
