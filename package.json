@@ -7,28 +7,34 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.5.5",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.0",
     "@storybook/addon-actions": "^5.1.11",
     "@storybook/addon-links": "^5.1.11",
     "@storybook/addons": "^5.1.11",
     "@storybook/react": "^5.1.11",
     "babel-loader": "^8.0.6",
-    "eslint": "^6.2.1",
+    "eslint": "^6.3.0",
     "eslint-plugin-react": "^7.14.3",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
-  },
-  "peerDependencies": {
+    "react-dom": "^16.9.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.0",
+    "@storybook/storybook-deployer": "^2.8.1"
+  },
+  "peerDependencies": {
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.0"
   },
   "dependencies": {
+    "@material-ui/styles": "^4.3.3",
+    "immer": "^3.2.0"
   },
   "scripts": {
+    "start": "yarn storybook",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "lint": "eslint src stories",
+    "deploy-storybook": "storybook-to-ghpages --ci"
   }
 }
