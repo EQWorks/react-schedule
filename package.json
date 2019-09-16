@@ -1,24 +1,34 @@
 {
   "name": "@eqworks/react-schedule",
-  "version": "1.0.0",
+  "private": false,
+  "version": "1.0.2",
   "main": "dist/index.js",
+  "source": "src/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "repository": "git@github.com:EQWorks/react-schedule.git",
   "author": "EQ Devs <dev@eqworks.com>",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.5.5",
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-react": "^7.0.0",
     "@storybook/addon-actions": "^5.1.11",
     "@storybook/addon-links": "^5.1.11",
     "@storybook/addons": "^5.1.11",
     "@storybook/react": "^5.1.11",
+    "@storybook/storybook-deployer": "^2.8.1",
     "babel-loader": "^8.0.6",
     "eslint": "^6.3.0",
     "eslint-plugin-react": "^7.14.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "rimraf": "^3.0.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.0",
-    "@storybook/storybook-deployer": "^2.8.1"
+    "semantic-ui-react": "^0.88.0"
   },
   "peerDependencies": {
     "react": "^16.9.0",
@@ -31,10 +41,13 @@
     "immer": "^3.2.0"
   },
   "scripts": {
+    "test": "echo 'No test yet!'",
     "start": "yarn storybook",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "lint": "eslint src stories",
-    "deploy-storybook": "storybook-to-ghpages --ci"
+    "deploy-storybook": "storybook-to-ghpages --ci",
+    "build": "rimraf dist && babel src --out-dir dist --copy-files",
+    "prepublishOnly": "yarn eslint src/ && yarn test && yarn build"
   }
 }
