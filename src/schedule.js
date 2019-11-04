@@ -23,18 +23,14 @@ const useStyles = makeStyles({
     display: 'flex',
     marginBottom: '1px',
   },
-  dayButton: {
+  cellButton: {
     padding: '0.5rem !important',
     height: '3rem',
     width: '3rem',
     flex: '0 0 auto',
-  },
-  hourButton: {
-    padding: '0.5rem !important',
-    width: '3rem',
     marginRight: '1px !important',
     borderRadius: 'initial !important',
-  }
+  },
 })
 
 const Schedule = ({ defaultSchedule, onChange }) => {
@@ -128,11 +124,11 @@ const Schedule = ({ defaultSchedule, onChange }) => {
   return (
     <div>
       <div className={classes.row}>
-        <Button className={classes.dayButton} size='mini' basic disabled />
+        <Button className={classes.cellButton} size='mini' basic disabled />
         {HOURS.map(hour => (
           <Button
             key={hour}
-            className={classes.hourButton}
+            className={classes.cellButton}
             size='mini'
             basic
             toggle
@@ -146,7 +142,7 @@ const Schedule = ({ defaultSchedule, onChange }) => {
       {DAYS.map((day, i) => (
         <div key={day} className={classes.row}>
           <Button
-            className={classes.dayButton}
+            className={classes.cellButton}
             size='mini'
             basic
             toggle
@@ -162,7 +158,7 @@ const Schedule = ({ defaultSchedule, onChange }) => {
               onMouseDown={onHourMouseDown(i, j)}
               onMouseUp={onHourMouseUp(i, j)}
               data={{ day: i, hour: j }}
-              className={classes.hourButton}
+              className={classes.cellButton}
               size='mini'
               toggle
               active={shouldHighlight(hour, i, j)}
