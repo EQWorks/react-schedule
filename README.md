@@ -1,1 +1,1 @@
-# react-scheduler
+# react-schedule

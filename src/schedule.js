@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/styles'
 import { Button } from 'semantic-ui-react'
-import produce from "immer"
+import produce from 'immer'
 
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+const HOURS = [...Array(24).keys()]
 
 const propTypes = {
   defaultSchedule: PropTypes.array,
@@ -24,11 +25,13 @@ const useStyles = makeStyles({
   },
   dayButton: {
     padding: '0.5rem !important',
-    height: '4rem',
+    height: '3rem',
     width: '3rem',
     flex: '0 0 auto',
   },
   hourButton: {
+    padding: '0.5rem !important',
+    width: '3rem',
     marginRight: '1px !important',
     borderRadius: 'initial !important',
   }
@@ -38,7 +41,7 @@ const Schedule = ({ defaultSchedule, onChange }) => {
   const [schedule, setSchedule] = useState(defaultSchedule)
   const [dragStart, setDragStart] = useState() // { day, hour }
   const [hover, setHover] = useState() // { day, hour }
-  
+
   useEffect(() => {
     onChange(schedule)
   }, [schedule])
@@ -48,12 +51,22 @@ const Schedule = ({ defaultSchedule, onChange }) => {
     dragstartState = schedule[dragStart.day][dragStart.hour]
   }
 
-  const onDayClick = (_, data) => {
-    const { day } = data.data
+  const onDayClick = (_, { data }) => {
+    const { day } = data
     setSchedule(produce(draftSchedule => {
       draftSchedule[day] = Array(24).fill(
         draftSchedule[day].filter(hour => hour).length < 24
       )
+    }))
+  }
+
+  const onHourClick = (_, { data }) => {
+    const { hour } = data
+    setSchedule(produce(draftSchedule => {
+      const toggle = draftSchedule.every(day => day[hour])
+      draftSchedule.forEach(day => {
+        day[hour] = !toggle
+      })
     }))
   }
 
@@ -114,6 +127,22 @@ const Schedule = ({ defaultSchedule, onChange }) => {
 
   return (
     <div>
+      <div className={classes.row}>
+        <Button className={classes.dayButton} size='mini' basic disabled />
+        {HOURS.map(hour => (
+          <Button
+            key={hour}
+            className={classes.hourButton}
+            size='mini'
+            basic
+            toggle
+            active={false}
+            content={String(hour).padStart(2, '0')}
+            data={{ hour }}
+            onClick={onHourClick}
+          />
+        ))}
+      </div>
       {DAYS.map((day, i) => (
         <div key={day} className={classes.row}>
           <Button
