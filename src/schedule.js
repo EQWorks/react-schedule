@@ -136,7 +136,7 @@ const Schedule = ({ defaultSchedule, onChange }) => {
             size='mini'
             basic
             toggle
-            active={false}
+            active={schedule.every(day => day[hour])}
             content={String(hour).padStart(2, '0')}
             data={{ hour }}
             onClick={onHourClick}
@@ -150,7 +150,7 @@ const Schedule = ({ defaultSchedule, onChange }) => {
             size='mini'
             basic
             toggle
-            active={false}
+            active={schedule[i].every(hour => hour)}
             content={day}
             data={{ day: i }}
             onClick={onDayClick}
