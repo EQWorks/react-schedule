@@ -44,7 +44,7 @@
     "test": "echo 'No test yet!'",
     "start": "yarn storybook",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
+    "build-storybook": "build-storybook -c .storybook -o .out",
     "lint": "eslint src stories",
     "deploy-storybook": "storybook-to-ghpages --ci",
     "build": "rimraf dist && babel src --out-dir dist --copy-files",
