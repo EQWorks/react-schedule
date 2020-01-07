@@ -191,10 +191,6 @@ const schedule = [
   ]
 ];
 
-storiesOf("Schedule", module)
-  .add("Simple", () => (
-    <Schedule defaultSchedule={schedule} onChange={action("onChange")} />
-  ))
-  .add("Simple-test", () => (
-    <Schedule defaultSchedule={schedule} onChange={action("onChange")} />
-  ));
+storiesOf("Schedule", module).add("Simple", () => (
+  <Schedule defaultSchedule={schedule} onChange={action("onChange")} />
+));
