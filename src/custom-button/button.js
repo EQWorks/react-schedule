@@ -1,17 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
-import classnames from "classnames";
-import "./button.css";
 
 const Button = props => {
   const { label, size = "medium", color = "gray", filled, outlined, disabled, toggle, active, onClick, className } = props;
+  const [hover, setHover] = useState(false)
 
-  const buttonClass = classnames("btn", {
-    small: size === "small",
-    medium: size === "medium",
-    large: size === "large",
-    disabled: disabled
-  });
+  const hoverEffect = status => {
+    status === 'disabled' && null
+    status === 'enabled' && setHover(!hover)
+  }
 
   let basicAppearance =
     filled || (toggle && active && filled)
@@ -24,15 +21,26 @@ const Button = props => {
 
   let toggleAppearance = toggle && !active && (filled ? { backgroundColor: "lightgrey", color: color } : outlined ? { border: `2px solid lightgrey`, color: color } : {});
 
+  let hoverStyle = hover && {  cursor: "pointer", filter: "brightness(95%)"}
+
+  let disabledStyle = disabled && {  cursor: "default", filter: "brightness(100%)", opacity: "0.5"}
+
+  let sizeStyle = size === 'small' ? {  width: "auto", height: "25px",} : size === 'medium' ? {  width: "auto", height: "30px", fontSize: "17px",} : size === 'large' ? {  width: "auto", height: "40px", fontSize: "20px",} : {  width: "auto", height: "30px", fontSize: "17px",}
+
   const buttonTheme = {
+    textAlign: "center",
+    borderRadius: "3px",
     ...basicAppearance,
-    ...toggleAppearance
+    ...toggleAppearance,
+    ...hoverStyle,
+    ...disabledStyle,
+    ...sizeStyle,
   };
 
   return disabled ? (
-    <input disabled type="button" value={label} className={`${className} ${buttonClass}`} style={buttonTheme} />
+    <input disabled type="button" value={label} className={`${className}`} style={buttonTheme} onMouseOver={() => hoverEffect('disabled')} onMouseLeave={() => setHover(!hover)}/>
   ) : (
-    <input type="button" value={label} className={`${className} ${buttonClass}`} style={buttonTheme} onClick={onClick} />
+    <input type="button" value={label} className={`${className}`} style={buttonTheme} onClick={onClick} onMouseOver={() => hoverEffect('enabled')} onMouseLeave = {() => setHover(!hover)} />
   );
 };
 
