@@ -2,12 +2,13 @@ import React, {useState} from "react";
 import PropTypes from "prop-types";
 
 const Button = props => {
-  const { label, size = "medium", color = "gray", filled, outlined, disabled, toggle, active, onClick, className } = props;
+  const { label, size, color='gray', width = 'auto', border = 'none', borderRadius = '3px', basic, filled, outlined, disabled, 
+          toggle, active, onClick, onMouseOver, onMouseDown, onMouseUp, className, overflow='hidden', fontSize } = props;
   const [hover, setHover] = useState(false)
 
   const hoverEffect = status => {
     status === 'disabled' && null
-    status === 'enabled' && setHover(!hover)
+    status === 'enabled' && setHover(true)
   }
 
   let basicAppearance =
@@ -19,28 +20,52 @@ const Button = props => {
       ? { color: color, filter: "brightness(95%)" }
       : { color: color };
 
-  let toggleAppearance = toggle && !active && (filled ? { backgroundColor: "lightgrey", color: color } : outlined ? { border: `2px solid lightgrey`, color: color } : {});
+  let toggleAppearance = 
+    toggle && !active && (filled ? { backgroundColor: "lightgrey", color: 'gray' } 
+      : outlined 
+      ? { border: `2px solid lightgrey`, color: color } 
+      : {color: color});
+
+  let toggleAppearanceBasic = 
+    toggle && !active && basic && (filled ? { backgroundColor: "white", color: 'gray', border: '1px solid lightgrey' } 
+      : outlined 
+      ? { border: `2px solid lightgrey`, color: color } 
+      : {color: color});
 
   let hoverStyle = hover && {  cursor: "pointer", filter: "brightness(95%)"}
 
-  let disabledStyle = disabled && {  cursor: "default", filter: "brightness(100%)", opacity: "0.5"}
+  let disabledStyle = disabled && {  cursor: "default", opacity: "0.5"}
 
-  let sizeStyle = size === 'small' ? {  width: "auto", height: "25px",} : size === 'medium' ? {  width: "auto", height: "30px", fontSize: "17px",} : size === 'large' ? {  width: "auto", height: "40px", fontSize: "20px",} : {  width: "auto", height: "30px", fontSize: "17px",}
+  let sizeStyle = 
+    size === 'small' 
+      ? {  width: width, height: "25px",} 
+      : size === 'medium' 
+      ? {  width: width, height: "30px", } 
+      : size === 'large' 
+      ? {  width: width, height: "40px", } 
+      : {}
+
+  let buttonBorder = basic ? {border: '1px solid lightgrey'} : outlined ? {} : {border: border}
 
   const buttonTheme = {
     textAlign: "center",
-    borderRadius: "3px",
+    overflow: overflow,
+    fontSize: fontSize,
+    borderRadius: borderRadius,
     ...basicAppearance,
     ...toggleAppearance,
+    ...toggleAppearanceBasic,
     ...hoverStyle,
     ...disabledStyle,
     ...sizeStyle,
+    ...buttonBorder
   };
 
   return disabled ? (
-    <input disabled type="button" value={label} className={`${className}`} style={buttonTheme} onMouseOver={() => hoverEffect('disabled')} onMouseLeave={() => setHover(!hover)}/>
+    <input disabled type="button" value={label} className={`${className}`} style={buttonTheme} onMouseOver={() => hoverEffect('disabled')} />
   ) : (
-    <input type="button" value={label} className={`${className}`} style={buttonTheme} onClick={onClick} onMouseOver={() => hoverEffect('enabled')} onMouseLeave = {() => setHover(!hover)} />
+    <input type="button" value={label} className={`${className}`} style={buttonTheme} onClick={(e) => onClick(e, {...props})} 
+          onMouseOver={onMouseOver} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseEnter={() => hoverEffect('enabled')} onMouseLeave = {() => setHover(false)} />
   );
 };
 
@@ -54,7 +79,16 @@ Button.propTypes = {
   onClick: PropTypes.func,
   outlined: PropTypes.bool,
   size: PropTypes.string,
-  toggle: PropTypes.bool
+  toggle: PropTypes.bool,
+  overflow: PropTypes.string,
+  width: PropTypes.string,
+  fontSize: PropTypes.string,
+  onMouseOver: PropTypes.func.isRequired,
+  onMouseDown: PropTypes.func.isRequired,
+  onMouseUp: PropTypes.func.isRequired,
+  border: PropTypes.string,
+  borderRadius: PropTypes.string,
+  basic: PropTypes.bool
 };
 
 export default Button;

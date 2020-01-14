@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { makeStyles } from "@material-ui/styles";
-import { Button } from "semantic-ui-react";
+import  Button  from "./custom-button/button";
 import produce from "immer";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -28,7 +28,8 @@ const useStyles = makeStyles({
     width: "3rem",
     flex: "0 0 auto",
     marginRight: "1px !important",
-    borderRadius: "initial !important"
+    borderRadius: "initial !important",
+    fontSize: '12px',
   }
 });
 
@@ -127,24 +128,25 @@ const Schedule = ({ defaultSchedule, onChange }) => {
   return (
     <div>
       <div className={classes.row}>
-        <Button className={classes.cellButton} size="mini" basic disabled />
+        <Button className={classes.cellButton} disabled/>
         {HOURS.map(hour => (
           <Button
             key={hour}
             className={classes.cellButton}
-            size="mini"
-            basic
             toggle
             active={schedule.every(day => day[hour])}
-            content={String(hour).padStart(2, "0")}
+            label={String(hour).padStart(2, "0")}
             data={{ hour }}
+            filled
+            basic
+            color="#1bb53d"
             onClick={onHourClick}
           />
         ))}
       </div>
       {DAYS.map((day, i) => (
         <div key={day} className={classes.row}>
-          <Button className={classes.cellButton} size="mini" basic toggle active={schedule[i].every(hour => hour)} content={day} data={{ day: i }} onClick={onDayClick} />
+          <Button className={classes.cellButton} toggle active={schedule[i].every(hour => hour)} label={day} data={{ day: i }} filled basic color="#1bb53d" onClick={onDayClick} />
           {schedule[i].map((hour, j) => (
             <Button
               key={j}
@@ -153,9 +155,10 @@ const Schedule = ({ defaultSchedule, onChange }) => {
               onMouseUp={onHourMouseUp(i, j)}
               data={{ day: i, hour: j }}
               className={classes.cellButton}
-              size="mini"
               toggle
               active={shouldHighlight(hour, i, j)}
+              filled
+              color="#1bb53d"
             />
           ))}
         </div>
