@@ -39,7 +39,7 @@
   "dependencies": {
     "@material-ui/styles": "^4.3.3",
     "classnames": "^2.2.6",
-    "immer": "^3.2.0"
+    "immer": "^8.0.1"
   },
   "scripts": {
     "test": "echo 'No test yet!'",
