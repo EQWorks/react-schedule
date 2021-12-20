@@ -1,129 +1,129 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 
-import { makeStyles } from "@material-ui/styles";
-import  Button  from "./custom-button/button";
-import produce from "immer";
+import { makeStyles } from '@material-ui/styles'
+import  Button  from './custom-button/button'
+import produce from 'immer'
 
-const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const HOURS = [...Array(24).keys()];
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+const HOURS = [...Array(24).keys()]
 
 const propTypes = {
   defaultSchedule: PropTypes.array,
-  onChange: PropTypes.func.isRequired
-};
+  onChange: PropTypes.func.isRequired,
+}
 
 const defaultProps = {
-  defaultSchedule: DAYS.map(() => Array(24).fill(false))
-};
+  defaultSchedule: DAYS.map(() => Array(24).fill(false)),
+}
 
 const useStyles = makeStyles({
   row: {
-    display: "flex",
-    marginBottom: "1px"
+    display: 'flex',
+    marginBottom: '1px',
   },
   cellButton: {
-    padding: "0.5rem !important",
-    height: "3rem",
-    width: "3rem",
-    flex: "0 0 auto",
-    marginRight: "1px !important",
-    borderRadius: "initial !important",
+    padding: '0.5rem !important',
+    height: '3rem',
+    width: '3rem',
+    flex: '0 0 auto',
+    marginRight: '1px !important',
+    borderRadius: 'initial !important',
     fontSize: '12px',
-  }
-});
+  },
+})
 
 const Schedule = ({ defaultSchedule, onChange }) => {
-  const [schedule, setSchedule] = useState(defaultSchedule);
-  const [dragStart, setDragStart] = useState(); // { day, hour }
-  const [hover, setHover] = useState(); // { day, hour }
+  const [schedule, setSchedule] = useState(defaultSchedule)
+  const [dragStart, setDragStart] = useState() // { day, hour }
+  const [hover, setHover] = useState() // { day, hour }
 
   useEffect(() => {
-    onChange(schedule);
-  }, [schedule]);
+    onChange(schedule)
+  }, [schedule])
 
-  let dragstartState;
+  let dragstartState
   if (dragStart) {
-    dragstartState = schedule[dragStart.day][dragStart.hour];
+    dragstartState = schedule[dragStart.day][dragStart.hour]
   }
 
   const onDayClick = (_, { data }) => {
-    const { day } = data;
+    const { day } = data
     setSchedule(
       produce(draftSchedule => {
-        draftSchedule[day] = Array(24).fill(draftSchedule[day].filter(hour => hour).length < 24);
-      })
-    );
-  };
+        draftSchedule[day] = Array(24).fill(draftSchedule[day].filter(hour => hour).length < 24)
+      }),
+    )
+  }
 
   const onHourClick = (_, { data }) => {
-    const { hour } = data;
+    const { hour } = data
     setSchedule(
       produce(draftSchedule => {
-        const toggle = draftSchedule.every(day => day[hour]);
+        const toggle = draftSchedule.every(day => day[hour])
         draftSchedule.forEach(day => {
-          day[hour] = !toggle;
-        });
-      })
-    );
-  };
+          day[hour] = !toggle
+        })
+      }),
+    )
+  }
 
   const onHourMouseDown = (day, hour) => () => {
     // handle mouse lose focus and click again
     if (dragStart && hover) {
-      return;
+      return
     }
-    setDragStart({ day, hour });
-    setHover({ day, hour });
-  };
+    setDragStart({ day, hour })
+    setHover({ day, hour })
+  }
 
   const onHourMouseOver = (day, hour) => () => {
     if (dragStart && (day !== hover.day || hour !== hover.hour)) {
-      setHover({ day, hour });
+      setHover({ day, hour })
     }
-  };
+  }
 
   const onHourMouseUp = (endDay, endHour) => () => {
     if (!dragStart || !hover) {
-      return;
+      return
     }
     // final drag range
-    const minDay = Math.min(dragStart.day, endDay);
-    const maxDay = Math.max(dragStart.day, endDay);
-    const minHour = Math.min(dragStart.hour, endHour);
-    const maxHour = Math.max(dragStart.hour, endHour);
+    const minDay = Math.min(dragStart.day, endDay)
+    const maxDay = Math.max(dragStart.day, endDay)
+    const minHour = Math.min(dragStart.hour, endHour)
+    const maxHour = Math.max(dragStart.hour, endHour)
 
     setSchedule(
       produce(draftSchedule => {
         for (let i = minDay; i <= maxDay; i++) {
           for (let j = minHour; j <= maxHour; j++) {
-            draftSchedule[i][j] = !dragstartState;
+            draftSchedule[i][j] = !dragstartState
           }
         }
-      })
-    );
-    setDragStart();
-    setHover();
-  };
+      }),
+    )
+    setDragStart()
+    setHover()
+  }
 
   const shouldHighlight = (originState, day, hour) => {
     if (!dragStart || !hover) {
-      return originState;
+      return originState
     }
     // current drag range
-    const minDay = Math.min(dragStart.day, hover.day);
-    const maxDay = Math.max(dragStart.day, hover.day);
-    const minHour = Math.min(dragStart.hour, hover.hour);
-    const maxHour = Math.max(dragStart.hour, hover.hour);
+    const minDay = Math.min(dragStart.day, hover.day)
+    const maxDay = Math.max(dragStart.day, hover.day)
+    const minHour = Math.min(dragStart.hour, hover.hour)
+    const maxHour = Math.max(dragStart.hour, hover.hour)
 
     if (day >= minDay && day <= maxDay && hour >= minHour && hour <= maxHour) {
-      return !dragstartState;
+      return !dragstartState
     } else {
-      return originState;
+      return originState
     }
-  };
+  }
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <div>
@@ -135,7 +135,7 @@ const Schedule = ({ defaultSchedule, onChange }) => {
             className={classes.cellButton}
             toggle
             active={schedule.every(day => day[hour])}
-            label={String(hour).padStart(2, "0")}
+            label={String(hour).padStart(2, '0')}
             data={{ hour }}
             filled
             basic
@@ -164,10 +164,10 @@ const Schedule = ({ defaultSchedule, onChange }) => {
         </div>
       ))}
     </div>
-  );
-};
+  )
+}
 
-Schedule.propTypes = propTypes;
-Schedule.defaultProps = defaultProps;
+Schedule.propTypes = propTypes
+Schedule.defaultProps = defaultProps
 
-export default Schedule;
+export default Schedule
