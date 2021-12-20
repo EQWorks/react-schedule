@@ -22,6 +22,7 @@
     "@storybook/react": "^6.4.9",
     "@storybook/storybook-deployer": "^2.8.1",
     "babel-loader": "^8.0.6",
+    "chromatic": "^6.2.3",
     "eslint": "^8.5.0",
     "eslint-plugin-react": "^7.14.3",
     "react": "^17.0.2",
@@ -49,7 +50,8 @@
     "lint": "eslint src stories",
     "deploy-storybook": "storybook-to-ghpages --ci",
     "build": "rimraf dist && babel src --out-dir dist --copy-files",
-    "prepublishOnly": "yarn eslint src/ && yarn test && yarn build"
+    "prepublishOnly": "yarn eslint src/ && yarn test && yarn build",
+    "chromatic": "npx chromatic"
   },
   "engines": {
     "node": ">=12.0.0"

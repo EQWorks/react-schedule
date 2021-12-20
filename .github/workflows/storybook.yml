@@ -1,35 +1,20 @@
-name: Storybook Build & Deploy
+name: Chromatic
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 jobs:
-  build-and-deploy:
+  chromatic-deployment:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
-      - name: Use Node.js
-        uses: actions/setup-node@v2
         with:
-          node-version: 12.x
-
-      - name: Cache Node Modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
+          fetch-depth: 0
       - run: yarn install
-      - run: yarn build-storybook
-      - name: Deploy
-        run: yarn deploy-storybook
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Publish to Chromatic
+        uses: chromaui/action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          exitZeroOnChanges: true
+          autoAcceptChanges: true
